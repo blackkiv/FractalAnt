@@ -88,7 +88,7 @@ namespace FractalAnt
                else
                    colorBrush.Color = Colors.Black;
            });
-            Thread.Sleep(15);
+            Thread.Sleep(5);
             thread = new Thread(Painter);
             thread.Start();
         }
