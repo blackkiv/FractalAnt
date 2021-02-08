@@ -26,6 +26,7 @@ namespace FractalAnt
 
         private List<List<Rectangle>> rectangles = null;
         Rectangle currRectangle = null;
+        int speed;
         int currColumn;
         int currRow;
         int direction;  // 0 - top;
@@ -88,13 +89,15 @@ namespace FractalAnt
                else
                    colorBrush.Color = Colors.Black;
            });
-            Thread.Sleep(5);
+            Thread.Sleep(speed);
             thread = new Thread(Painter);
             thread.Start();
         }
 
         private void Initialize_gridPanel()
         {
+            speed = Convert.ToInt32(sliderSpeed.Value);
+
             gridPanel.ColumnDefinitions.Clear();
             gridPanel.RowDefinitions.Clear();
             var size = Convert.ToInt32(sizeTextBox.Text);
@@ -157,8 +160,18 @@ namespace FractalAnt
 
         private void StartBtn_Click(object sender, RoutedEventArgs e)
         {
-            thread?.Abort();
             Initialize_gridPanel();
+        }
+
+        private void sliderSpeed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            speedTextBlock.Text = Convert.ToString(Convert.ToInt32(((Slider)sender).Value));
+        }
+
+        private void stopBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Thread.Sleep(speed);
+            thread?.Interrupt();
         }
     }
 }
