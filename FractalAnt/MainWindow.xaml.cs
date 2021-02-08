@@ -88,6 +88,9 @@ namespace FractalAnt
                else
                    colorBrush.Color = Colors.Black;
            });
+            Thread.Sleep(15);
+            thread = new Thread(Painter);
+            thread.Start();
         }
 
         private void Initialize_gridPanel()
