@@ -38,8 +38,6 @@ namespace FractalAnt
         {
             try
             {
-
-
                 SolidColorBrush colorBrush = null;
                 Dispatcher.Invoke(() =>
                 {
@@ -107,7 +105,7 @@ namespace FractalAnt
             }
             catch( ThreadInterruptedException)
             {
-                MessageBox.Show("Stop");
+                
             }
         }
 
