@@ -22,7 +22,7 @@ namespace FractalAnt
     public partial class MainWindow : Window
     {
 
-        private Thread thread;
+        Thread thread = null;
 
         private List<List<Rectangle>> rectangles = null;
         Rectangle currRectangle = null;
@@ -34,64 +34,81 @@ namespace FractalAnt
                         // 2 - bottom
                         // 3 - left
 
-        private void Painter()
+        private async void Painter()
         {
-            SolidColorBrush colorBrush = null;
-            Dispatcher.Invoke(() =>
+            try
             {
-                colorBrush = ((SolidColorBrush)currRectangle.Fill);
-            
-                if (colorBrush.Color == Colors.Black)
-                {
-                    direction -= 1;
-                    if (direction < 0)
-                        direction = 3;
-                }
-                else
-                {
-                    direction += 1;
-                    if (direction > 3)
-                        direction = 0;
-                }
-            });
-            int columnK = 0;
-            int rowK = 0;
-            switch (direction)
-            {
-                case 0:
-                    rowK = -1;
-                    columnK = 0;
-                    break;
-                case 1:
-                    rowK = 0;
-                    columnK = 1;
-                    break;
-                case 2:
-                    rowK = 1;
-                    columnK = 0;
-                    break;
-                case 3:
-                    rowK = 0;
-                    columnK = -1;
-                    break;
-                default:
-                    MessageBox.Show("wtf?!?!");
-                    break;
-            }
 
-            currColumn += columnK;
-            currRow += rowK;
-            currRectangle = rectangles[currRow][currColumn];
-            Dispatcher.Invoke(() =>
-           {
-               if (colorBrush.Color == Colors.Black)
-                   colorBrush.Color = Colors.White;
-               else
-                   colorBrush.Color = Colors.Black;
-           });
-            Thread.Sleep(speed);
-            thread = new Thread(Painter);
-            thread.Start();
+
+                SolidColorBrush colorBrush = null;
+                Dispatcher.Invoke(() =>
+                {
+                    colorBrush = ((SolidColorBrush)currRectangle.Fill);
+
+                    if (colorBrush.Color == Colors.Black)
+                    {
+                        direction -= 1;
+                        if (direction < 0)
+                            direction = 3;
+                    }
+                    else
+                    {
+                        direction += 1;
+                        if (direction > 3)
+                            direction = 0;
+                    }
+                });
+                int columnK = 0;
+                int rowK = 0;
+                switch (direction)
+                {
+                    case 0:
+                        rowK = -1;
+                        columnK = 0;
+                        break;
+                    case 1:
+                        rowK = 0;
+                        columnK = 1;
+                        break;
+                    case 2:
+                        rowK = 1;
+                        columnK = 0;
+                        break;
+                    case 3:
+                        rowK = 0;
+                        columnK = -1;
+                        break;
+                    default:
+                        MessageBox.Show("wtf?!?!");
+                        break;
+                }
+
+                currColumn += columnK;
+                currRow += rowK;
+                try
+                {
+                    currRectangle = rectangles[currRow][currColumn];
+                }
+                catch (Exception)
+                { Stop_App(); }
+
+                Dispatcher.Invoke(() =>
+                {
+                    if (colorBrush.Color == Colors.Black)
+                        colorBrush.Color = Colors.White;
+                    else
+                        colorBrush.Color = Colors.Black;
+                });
+                Thread.Sleep(speed);
+                thread = new Thread(
+                     Painter
+                 );
+                thread?.Start();
+            }
+            catch( ThreadInterruptedException)
+            {
+                MessageBox.Show("Stop");
+            }
         }
 
         private void Initialize_gridPanel()
@@ -138,6 +155,11 @@ namespace FractalAnt
             Set_Start_Point(sender as Rectangle);
         }
 
+        private void Stop_App()
+        {
+            thread?.Interrupt();
+        }
+
         private void Set_Start_Point(Rectangle rectangle)
         {
             int column = Grid.GetColumn(rectangle);
@@ -148,9 +170,11 @@ namespace FractalAnt
             currRow = row;
             direction = 0;
 
-            thread = new Thread(Painter);
-            thread.Start();
-            
+            thread = new Thread(
+                Painter
+            );
+            thread?.Start();
+
         }
 
         public MainWindow()
@@ -170,8 +194,7 @@ namespace FractalAnt
 
         private void stopBtn_Click(object sender, RoutedEventArgs e)
         {
-            Thread.Sleep(speed);
-            thread?.Interrupt();
+            Stop_App();
         }
     }
 }
