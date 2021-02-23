@@ -28,7 +28,6 @@ namespace FractalAnt
         {
             InitializeComponent();
         }
-        
 
         private async void Painter()
         {
