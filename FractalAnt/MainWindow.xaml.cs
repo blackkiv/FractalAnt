@@ -14,7 +14,11 @@ namespace FractalAnt
         private Rectangle currRectangle;
         private int currRow;
 
-        private int direction; // 0 - top;
+        private int direction; 
+        // 0 - top;
+        // 1 - right
+        // 2 - bottom
+        // 3 - left
 
         private List<List<Rectangle>> rectangles;
         private int speed;
@@ -24,9 +28,7 @@ namespace FractalAnt
         {
             InitializeComponent();
         }
-        // 1 - right
-        // 2 - bottom
-        // 3 - left
+        
 
         private async void Painter()
         {
