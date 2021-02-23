@@ -113,9 +113,19 @@ namespace FractalAnt
         {
             speed = Convert.ToInt32(sliderSpeed.Value);
 
+            // if (rectangles != null)
+            //     for (int index = 0, lenght = rectangles.Count; index < lenght; ++index)
+            //     {
+            //         for(int indexI = 0; indexI < lenght; ++indexI)
+            //         {
+            //             rectangles[index][indexI].Fill = new SolidColorBrush(Colors.White);
+            //         }
+            //     }
+            //
             gridPanel.ColumnDefinitions.Clear();
             gridPanel.RowDefinitions.Clear();
             var size = Convert.ToInt32(sizeTextBox.Text);
+
 
             for (int i = 0; i < size; ++i)
             {
@@ -123,6 +133,16 @@ namespace FractalAnt
                 gridPanel.RowDefinitions.Add(new RowDefinition());
             }
 
+
+            if (rectangles != null)
+            {
+                for (int index = 0; index < size; ++index)
+                {
+                    rectangles[index].Clear();
+                }
+                rectangles.Clear();
+            }
+            
             rectangles = new List<List<Rectangle>>(size);
 
             for (int i = 0; i < size; ++i)
@@ -141,7 +161,6 @@ namespace FractalAnt
                     sublist.Add(rectangle);
                     Grid.SetRow(rectangle, i);
                     Grid.SetColumn(rectangle, j);
-
                     gridPanel.Children.Add(rectangle);
                 }
                 rectangles.Add(sublist);
