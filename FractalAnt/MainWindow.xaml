@@ -3,30 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FractalAnt"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Margin="15">
-            <TextBox Name="sizeTextBox" Text="16" FontSize="25" Margin="0 0 0 10"/>
-            <Button Name="startBtn" Content="Generate" FontSize="25" Click="StartBtn_Click"  Margin="0 0 0 20"/>
-            <Button Name="stopBtn" Content="Stop" FontSize="25" Click="stopBtn_Click" Margin="0 0 0 20"/>
-            <TextBlock Name="speedTextBlock" FontSize="25" Text="1" HorizontalAlignment="Center" Margin="0 0 0 10"/>
-            <Slider Name="sliderSpeed" Margin="0 0 0 10" Maximum="50" Minimum="1" SmallChange="1" ValueChanged="sliderSpeed_ValueChanged"/>
-            
+            <TextBox Name="sizeTextBox" Text="16" FontSize="25" Margin="0 0 0 10" />
+            <Button Name="startBtn" Content="Generate" FontSize="25" Click="StartBtn_Click" Margin="0 0 0 20" />
+            <Button Name="stopBtn" Content="Stop" FontSize="25" Click="stopBtn_Click" Margin="0 0 0 20" />
+            <TextBlock Name="speedTextBlock" FontSize="25" Text="1" HorizontalAlignment="Center" Margin="0 0 0 10" />
+            <Slider Name="sliderSpeed" Margin="0 0 0 10" Maximum="50" Minimum="1" SmallChange="1"
+                    ValueChanged="sliderSpeed_ValueChanged" />
+
         </StackPanel>
 
         <Border Grid.Column="1" BorderBrush="Black" BorderThickness="2" Margin="15">
             <Grid Name="gridPanel">
-                <Grid.ColumnDefinitions/>
-                <Grid.RowDefinitions/>
             </Grid>
         </Border>
-        
+
 
     </Grid>
 </Window>

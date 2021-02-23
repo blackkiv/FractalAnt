@@ -1,38 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace FractalAnt
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private int currColumn;
+        private Rectangle currRectangle;
+        private int currRow;
 
-        Thread thread = null;
+        private int direction; // 0 - top;
 
-        private List<List<Rectangle>> rectangles = null;
-        Rectangle currRectangle = null;
-        int speed;
-        int currColumn;
-        int currRow;
-        int direction;  // 0 - top;
-                        // 1 - right
-                        // 2 - bottom
-                        // 3 - left
+        private List<List<Rectangle>> rectangles;
+        private int speed;
+        private Thread thread;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+        // 1 - right
+        // 2 - bottom
+        // 3 - left
 
         private async void Painter()
         {
@@ -41,7 +35,7 @@ namespace FractalAnt
                 SolidColorBrush colorBrush = null;
                 Dispatcher.Invoke(() =>
                 {
-                    colorBrush = ((SolidColorBrush)currRectangle.Fill);
+                    colorBrush = (SolidColorBrush) currRectangle.Fill;
 
                     if (colorBrush.Color == Colors.Black)
                     {
@@ -56,8 +50,8 @@ namespace FractalAnt
                             direction = 0;
                     }
                 });
-                int columnK = 0;
-                int rowK = 0;
+                var columnK = 0;
+                var rowK = 0;
                 switch (direction)
                 {
                     case 0:
@@ -88,7 +82,9 @@ namespace FractalAnt
                     currRectangle = rectangles[currRow][currColumn];
                 }
                 catch (Exception)
-                { Stop_App(); }
+                {
+                    Stop_App();
+                }
 
                 Dispatcher.Invoke(() =>
                 {
@@ -99,13 +95,12 @@ namespace FractalAnt
                 });
                 Thread.Sleep(speed);
                 thread = new Thread(
-                     Painter
-                 );
+                    Painter
+                );
                 thread?.Start();
             }
-            catch( ThreadInterruptedException)
+            catch (ThreadInterruptedException)
             {
-                
             }
         }
 
@@ -113,21 +108,12 @@ namespace FractalAnt
         {
             speed = Convert.ToInt32(sliderSpeed.Value);
 
-            // if (rectangles != null)
-            //     for (int index = 0, lenght = rectangles.Count; index < lenght; ++index)
-            //     {
-            //         for(int indexI = 0; indexI < lenght; ++indexI)
-            //         {
-            //             rectangles[index][indexI].Fill = new SolidColorBrush(Colors.White);
-            //         }
-            //     }
-            //
             gridPanel.ColumnDefinitions.Clear();
             gridPanel.RowDefinitions.Clear();
             var size = Convert.ToInt32(sizeTextBox.Text);
 
 
-            for (int i = 0; i < size; ++i)
+            for (var i = 0; i < size; ++i)
             {
                 gridPanel.ColumnDefinitions.Add(new ColumnDefinition());
                 gridPanel.RowDefinitions.Add(new RowDefinition());
@@ -136,33 +122,27 @@ namespace FractalAnt
 
             if (rectangles != null)
             {
-                for (int index = 0; index < size; ++index)
-                {
-                    rectangles[index].Clear();
-                }
+                for (var index = 0; index < size; ++index) rectangles[index].Clear();
+
                 rectangles.Clear();
             }
-            
+
             rectangles = new List<List<Rectangle>>(size);
 
-            for (int i = 0; i < size; ++i)
+            for (var i = 0; i < size; ++i)
             {
                 var sublist = new List<Rectangle>(size);
-                for (int j = 0; j < size; ++j)
+                for (var j = 0; j < size; ++j)
                 {
                     var rectangle = new Rectangle();
                     rectangle.MouseLeftButtonUp += Rectangle_Click;
-                    //rectangle.Stroke = new SolidColorBrush(Colors.Black);
                     rectangle.Fill = new SolidColorBrush(Colors.White);
-                    //if ((i + j) % 2 == 0)
-                    //    rectangle.Fill = new SolidColorBrush(Colors.White);
-                    //else
-                    //    rectangle.Fill = new SolidColorBrush(Colors.Black);
                     sublist.Add(rectangle);
                     Grid.SetRow(rectangle, i);
                     Grid.SetColumn(rectangle, j);
                     gridPanel.Children.Add(rectangle);
                 }
+
                 rectangles.Add(sublist);
             }
         }
@@ -179,9 +159,8 @@ namespace FractalAnt
 
         private void Set_Start_Point(Rectangle rectangle)
         {
-            int column = Grid.GetColumn(rectangle);
-            int row = Grid.GetRow(rectangle);
-            //MessageBox.Show($"column = {column}\nrow = {row}");
+            var column = Grid.GetColumn(rectangle);
+            var row = Grid.GetRow(rectangle);
             currRectangle = rectangles[row][column];
             currColumn = column;
             currRow = row;
@@ -191,12 +170,6 @@ namespace FractalAnt
                 Painter
             );
             thread?.Start();
-
-        }
-
-        public MainWindow()
-        {
-            InitializeComponent();
         }
 
         private void StartBtn_Click(object sender, RoutedEventArgs e)
@@ -206,7 +179,7 @@ namespace FractalAnt
 
         private void sliderSpeed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            speedTextBlock.Text = Convert.ToString(Convert.ToInt32(((Slider)sender).Value));
+            speedTextBlock.Text = Convert.ToString(Convert.ToInt32(((Slider) sender).Value));
         }
 
         private void stopBtn_Click(object sender, RoutedEventArgs e)
